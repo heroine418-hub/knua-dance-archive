@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국예술종합학교 무용원 역사 아카이브 — 통합본 v2</title>
+<style>
+  :root {
+    --white: #ffffff; --black: #141414; --orange: #e2481f;
+    --rule: #e5e5e5; --rule-dark: #141414; --text-muted: #737373;
+    --font-base: -apple-system, BlinkMacSystemFont, "Pretendard Variable", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--white); color: var(--black); font-family: var(--font-base);
+    font-size: 13px; letter-spacing: -0.015em; display: flex; flex-direction: column;
+    height: 100vh; overflow: hidden;
+  }
+  button { font-family: inherit; }
+
+  .special-exhibit-banner {
+    background-color: var(--black); color: var(--white); padding: 8px 24px;
+    display: flex; justify-content: space-between; align-items: center; font-size: 11px;
+    border-bottom: 1px solid var(--rule-dark); flex-shrink: 0;
+  }
+  .banner-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .banner-badge { background-color: var(--orange); color: #fff; font-weight: 800; padding: 2px 6px; letter-spacing: 0.5px; }
+  .banner-link { color: var(--white); text-decoration: underline; font-weight: 700; margin-left: 12px; cursor: pointer; background:none; border:none; font-size:11px; }
+  .banner-link:hover { color: var(--orange); }
+  .banner-right { color: #b8b8b8; white-space: nowrap; }
+
+  .masthead {
+    height: 60px; border-bottom: 1px solid var(--rule-dark); display: grid;
+    grid-template-columns: 320px 1fr; flex-shrink: 0; background: var(--white);
+  }
+  .brand-block { padding: 0 24px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--rule-dark); }
+  .brand-kicker { font-size: 10px; font-weight: 800; color: var(--orange); letter-spacing: 1px; }
+  .brand-title { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; }
+
+  .nav-block { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+  .main-nav { display: flex; gap: 24px; height: 100%; align-items: center; }
+  .nav-link {
+    font-size: 13px; font-weight: 700; color: var(--text-muted); text-decoration: none;
+    display: flex; align-items: center; gap: 5px; height: 100%; position: relative;
+    background: none; border: none; cursor: pointer;
+  }
+  .nav-link:hover, .nav-link.active { color: var(--black); }
+  .nav-link.active::after {
+    content: ""; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background-color: var(--orange);
+  }
+  .nav-link .period-tag {
+    font-size: 9px; font-weight: 800; color: var(--orange); border: 1px solid var(--orange);
+    padding: 1px 5px; border-radius: 100px; letter-spacing: 0;
+  }
+  .total-count { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+  .total-count strong { color: var(--orange); }
+
+  .app-body { display: flex; flex: 1; overflow: hidden; }
+  .side-menu {
+    width: 208px; flex-shrink: 0; border-right: 1px solid var(--rule-dark);
+    overflow-y: auto; background: var(--white); padding: 14px 0;
+  }
+  .side-item {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 10px 20px; background: none; border: none; cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--black); text-align: left;
+  }
+  .side-item .side-icon { width: 18px; text-align: center; font-size: 14px; color: var(--text-muted); flex-shrink:0; }
+  .side-item:hover { background: #fafafa; }
+  .side-item.active { background: var(--orange); color: #fff; }
+  .side-item.active .side-icon { color: #fff; }
+  .side-sep { height: 1px; background: var(--rule); margin: 10px 16px; }
+  .side-item .side-sub { font-size: 9.5px; color: var(--text-muted); display:block; margin-top:1px; font-weight:500; }
+  .side-item.active .side-sub { color: #fde3d9; }
+  .view-container { flex: 1; display: flex; overflow: hidden; }
+  #view-placeholder { display: none; flex: 1; align-items: center; justify-content: center; padding: 60px; }
+  #view-placeholder.active { display: flex; }
+
+  .card-view { display:none; flex:1; overflow-y:auto; padding: 28px 36px; }
+  .card-view.active { display:block; }
+  .card-view-header { margin-bottom: 22px; }
+  .card-view-header h2 { font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+  .card-view-header p { font-size: 12.5px; color: var(--text-muted); max-width: 640px; line-height:1.6; }
+  .card-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap:0; border-top:1px solid var(--rule-dark); border-left:1px solid var(--rule-dark); margin-bottom: 24px; }
+  .grid-card {
+    border-right:1px solid var(--rule-dark); border-bottom:1px solid var(--rule-dark);
+    padding:16px; cursor:pointer; background:var(--white); text-align:left; font-family:inherit;
+  }
+  .grid-card:hover { background:#fafafa; }
+  .grid-card.is-active { background: var(--orange); color:#fff; }
+  .grid-card .gc-title { font-size:13.5px; font-weight:800; margin-bottom:4px; }
+  .grid-card .gc-sub { font-size:11px; color:var(--text-muted); }
+  .grid-card.is-active .gc-sub { color:#fde3d9; }
+  .grid-card .gc-count { font-size:20px; font-weight:800; color:var(--orange); margin-bottom:6px; font-family:inherit; }
+  .grid-card.is-active .gc-count { color:#fff; }
+
+  .card-detail-panel { border:1px solid var(--rule-dark); padding:20px; margin-top:4px; }
+  .card-detail-panel .relation-label { font-size:10.5px; font-weight:800; color:var(--orange); margin-bottom:8px; }
+
+  .hero-block { display:flex; gap:40px; margin-bottom:30px; padding-bottom:24px; border-bottom:1px solid var(--rule-dark); flex-wrap:wrap; }
+  .hero-stat { }
+  .hero-stat .hs-num { font-size:30px; font-weight:800; color:var(--orange); line-height:1; }
+  .hero-stat .hs-label { font-size:11.5px; color:var(--text-muted); margin-top:6px; }
+
+  .zone-card { border:1px solid var(--rule-dark); padding:18px; margin-bottom:12px; cursor:pointer; }
+  .zone-card:hover { background:#fafafa; }
+  .zone-card .zc-num { font-size:10.5px; font-weight:800; color:var(--orange); margin-bottom:6px; }
+  .zone-card .zc-title { font-size:15px; font-weight:800; margin-bottom:6px; }
+  .zone-card .zc-desc { font-size:12px; color:var(--text-muted); line-height:1.6; }
+  .zone-detail { border:1px solid var(--orange); padding:18px; margin-top:-1px; margin-bottom:12px; background:#fdece6; display:none; }
+  .zone-detail.open { display:block; }
+  .zone-detail .zd-title { font-size:13px; font-weight:800; margin-bottom:8px; color:var(--orange-deep, var(--orange)); }
+  .zone-detail ul { padding-left:18px; font-size:12px; line-height:1.8; color:var(--black); }
+
+  .venue-map-wrap { border:1px solid var(--rule-dark); height:260px; position:relative; background:#f6f6f4; margin-bottom:24px; }
+  .venue-dot {
+    position:absolute; width:7px; height:7px; border-radius:50%; background:var(--orange);
+    border:1.5px solid var(--white); box-shadow:0 0 0 1px var(--orange); transform:translate(-50%,-50%); cursor:pointer;
+  }
+  .venue-dot:hover { width:10px; height:10px; }
+
+  .view { display: none; flex: 1; overflow: hidden; }
+  .view.active { display: grid; }
+
+  /* ===== 공통 워크스페이스 그리드 ===== */
+  .workspace { grid-template-columns: 280px 1fr 420px; }
+
+  .col-nav { border-right: 1px solid var(--rule); overflow-y: auto; padding: 22px; }
+  .nav-group-title { font-size: 11px; font-weight: 800; color: var(--orange); margin-bottom: 10px; }
+  .nav-item-list { list-style: none; margin-bottom: 22px; }
+  .nav-item {
+    padding: 6px 0; display: flex; justify-content: space-between; cursor: pointer;
+    width: 100%; background: none; border: none; text-align: left; font-size: 12.5px; color: var(--black);
+  }
+  .nav-item:hover { color: var(--orange); }
+  .nav-item.is-selected { font-weight: 700; color: var(--orange); }
+  .nav-item.static { cursor: default; color: var(--text-muted); font-weight:500; }
+  .nav-item.static:hover { color: var(--text-muted); }
+  .count-tag { font-size: 11px; font-weight: 700; color: var(--text-muted); }
+  .nav-item.is-selected .count-tag { color: var(--orange); }
+  .year-input-row { display:flex; gap:6px; align-items:center; margin-top:4px; }
+  .year-input-row input { width:56px; font-size:12px; border:1px solid var(--rule); padding:4px 6px; font-family:inherit; }
+  .year-input-row button { font-size:11px; border:1px solid var(--rule-dark); background:var(--white); padding:4px 8px; cursor:pointer; }
+  .hint-note { font-size:10.5px; color:var(--text-muted); line-height:1.6; }
+
+  .col-feed { border-right: 1px solid var(--rule-dark); overflow-y: auto; padding: 22px; }
+  .feed-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .feed-title { font-size: 15px; font-weight: 800; }
+  .clear-btn { font-size: 11.5px; font-weight: 700; color: var(--text-muted); background:none; border:none; cursor:pointer; }
+  .clear-btn:hover { color: var(--orange); }
+
+  .sheet-entry {
+    padding: 13px 4px; border-bottom: 1px solid var(--rule); display: grid;
+    grid-template-columns: 78px 1fr; gap: 14px; cursor: pointer;
+    width: 100%; background: none; border-left:none; border-right:none; border-top:none; text-align:left;
+  }
+  .sheet-entry:hover { background-color: #fafafa; }
+  .sheet-entry.is-active { background-color: #fafafa; border-left: 3px solid var(--orange); padding-left: 15px; }
+  .entry-year { font-size: 11.5px; font-weight: 800; color: var(--orange); line-height:1.4; }
+  .entry-main h3 { font-size: 13.5px; font-weight: 800; margin-bottom: 3px; line-height: 1.35; }
+  .entry-tags { font-size: 10.5px; color: var(--text-muted); }
+  .empty-feed { padding: 48px 4px; text-align:center; color: var(--text-muted); font-size: 13px; }
+
+  .col-preview { overflow-y: auto; padding: 22px; display: flex; flex-direction: column; }
+  .empty-state-box {
+    flex: 1; border: 1px solid var(--rule-dark);
+    background-image: linear-gradient(to top right, transparent calc(50% - 0.75px), var(--orange) 50%, transparent calc(50% + 0.75px));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .empty-plate { background: var(--white); border: 1px solid var(--rule); padding: 12px 20px; font-size: 11px; font-weight: 700; color: var(--black); text-align: center; line-height:1.6; }
+
+  .detail-header { margin-bottom: 16px; }
+  .kicker { font-size: 11px; font-weight: 800; color: var(--orange); margin-bottom: 6px; }
+  .detail-title { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 4px; }
+  .registry-code { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+
+  .viewer-plate {
+    width: 100%; height: 190px; border: 1px solid var(--rule-dark); position: relative;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 20px; background: var(--white);
+  }
+  .viewer-plate.has-diagonal {
+    background-image: linear-gradient(to top right, transparent calc(50% - 0.75px), var(--orange) 50%, transparent calc(50% + 0.75px));
+  }
+  .plate-inner { background: var(--white); padding: 12px 18px; border: 1px solid var(--rule); text-align: center; z-index: 2; }
+  .plate-status { display: block; font-size: 12px; font-weight: 800; }
+  .plate-spec { display: block; font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  .map-plate {
+    width: 100%; height: 150px; border: 1px solid var(--rule-dark); position: relative;
+    margin-bottom: 16px; background: #f6f6f4; overflow: hidden;
+  }
+  .map-dot { position:absolute; width:8px; height:8px; border-radius:50%; background: var(--orange); border:2px solid var(--white); box-shadow:0 0 0 1px var(--orange); transform: translate(-50%,-50%); }
+  .map-caption { position:absolute; bottom:6px; left:8px; font-size:10px; color:var(--text-muted); background:rgba(255,255,255,.85); padding:2px 6px; }
+
+  .relation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
+  .relation-grid.single { grid-template-columns: 1fr; }
+  .relation-label { font-size: 10.5px; font-weight: 800; color: var(--orange); margin-bottom: 8px; }
+  .relation-list { list-style: none; }
+  .relation-list li { margin-bottom: 7px; font-size: 12px; }
+  .relation-anchor { font-weight: 700; border-bottom: 1px solid var(--black); padding-bottom: 1px; }
+  .relation-anchor .role { font-size: 10.5px; font-weight: 400; color: var(--text-muted); margin-left: 2px; }
+  .relation-empty { color: var(--text-muted); font-size: 11.5px; }
+
+  .provenance-specs, .field-specs { display: grid; grid-template-columns: 64px 1fr; row-gap: 7px; font-size: 12px; margin-bottom:14px; }
+  .provenance-specs dt, .field-specs dt { color: var(--text-muted); font-weight: 600; }
+  .provenance-specs dd, .field-specs dd { color: var(--black); font-weight: 500; }
+
+  .flag-note {
+    margin-top: 12px; font-size: 11.5px; font-weight: 600; color: var(--orange);
+    background: #fdece6; border-left: 3px solid var(--orange); padding: 9px 12px; line-height: 1.6;
+  }
+  .capsule-note, .info-note {
+    margin-top: 12px; font-size: 11px; color: var(--text-muted); background: #f4f4f2;
+    border-left: 3px solid var(--rule-dark); padding: 9px 12px; line-height: 1.6;
+  }
+  .award-note {
+    margin-top: 10px; font-size: 11px; font-weight: 600; color: var(--orange);
+    background: #fdece6; border-left: 3px solid var(--orange); padding: 8px 11px; line-height: 1.6;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--white); }
+  ::-webkit-scrollbar-thumb { background: var(--rule); }
+</style>
+</head>
+<body>
+
+  <aside class="special-exhibit-banner">
+    <div class="banner-left">
+      <span class="banner-badge">30th EXHIBITION</span>
+      <span>개원 30주년 기념 디지털 전시 〈RE: MOVE ERA : 움직임의 시간들〉</span>
+      <button class="banner-link" id="bannerToExhibit">전시관 바로가기 →</button>
+    </div>
+    <div class="banner-right">2026.08–12 기간 한정 · 종료 후 이 배너는 사라집니다</div>
+  </aside>
+
+  <header class="masthead">
+    <div class="brand-block">
+      <span class="brand-kicker">K-ARTS DANCE DIGITAL REPOSITORY</span>
+      <h1 class="brand-title">무용원 역사 아카이브</h1>
+    </div>
+    <div class="nav-block">
+      <div style="font-size:11px; color:var(--text-muted); font-weight:600;">Google Arts & Culture 카테고리 매핑 기준 좌측 메뉴</div>
+      <div class="total-count" id="headerCount">누적 사료 <strong>—</strong> 관리 중</div>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <nav class="side-menu" id="sideMenu">
+      <button class="side-item active" data-view="home"><span class="side-icon">⌂</span><span>홈</span></button>
+      <div class="side-sep"></div>
+      <button class="side-item" data-view="exhibit-theme"><span class="side-icon">◨</span><span>기획전시 〈RE:MOVE ERA〉</span></button>
+      <button class="side-item" data-view="explore"><span class="side-icon">⌘</span><span>컬렉션 (소장처별)</span></button>
+      <button class="side-item" data-view="authorities"><span class="side-icon">☻</span><span>인물 (Persons)</span></button>
+      <button class="side-item" data-view="itemtypes"><span class="side-icon">▤</span><span>사료 매체 (Item Types)</span></button>
+      <button class="side-item" data-view="disciplines"><span class="side-icon">✎</span><span>분야 및 경향</span></button>
+      <button class="side-item" data-view="competitions"><span class="side-icon">◷</span><span>연혁 및 이벤트</span></button>
+      <button class="side-item" data-view="orgs"><span class="side-icon">⌂</span><span>기관 및 단체</span></button>
+      <button class="side-item" data-view="spaces"><span class="side-icon">⚲</span><span>공간 및 무대</span></button>
+      <div class="side-sep"></div>
+      <button class="side-item" data-view="capsule"><span class="side-icon">✉</span><span>타임캡슐 & 방명록</span></button>
+    </nav>
+
+    <div class="view-container">
+      <!-- ===================== VIEW 1: 사료 탐색 (컬렉션/아이템) ===================== -->
+      <div class="view workspace" id="view-explore">
+        <aside class="col-nav">
+          <div class="nav-group-title">공식 컬렉션 (출처군)</div>
+          <ul class="nav-item-list" id="collectionList"></ul>
+
+          <div class="nav-group-title">상설 색인 (Authority)</div>
+          <ul class="nav-item-list">
+            <li><button class="nav-item static" data-goto-auth="1">교수진·안무가 색인 <span>›</span></button></li>
+            <li><button class="nav-item static">소속 무용단 (LDP, RTB 등) <span>›</span></button></li>
+            <li><button class="nav-item static" data-goto-comp="1">공연·이벤트 색인 (콩쿨·대회 탭에서 보기) <span>›</span></button></li>
+          </ul>
+          <div class="hint-note">"공연·이벤트 색인"은 연혁·이벤트 메뉴와 실제로 연결되어 있습니다 — 클릭하면 그 화면으로 전환됩니다.</div>
+        </aside>
+
+        <main class="col-feed">
+          <div class="feed-header">
+            <div>
+              <h2 class="feed-title" id="feedTitleExplore">전체 사료 연대기</h2>
+              <span class="entry-tags">1995년 개원 발기인 총회부터 최근 공연까지</span>
+            </div>
+            <button class="clear-btn" id="clearFilterExplore" style="display:none;">필터 해제 ×</button>
+          </div>
+          <div id="feedListExplore"></div>
+        </main>
+
+        <aside class="col-preview" id="colPreviewExplore"></aside>
+      </div>
+
+      <!-- ===================== VIEW 2: 콩쿨·대회 = 연혁 및 이벤트 ===================== -->
+      <div class="view workspace" id="view-competitions">
+        <aside class="col-nav">
+          <div class="nav-group-title">대회 유형</div>
+          <ul class="nav-item-list" id="typeList"></ul>
+
+          <div class="nav-group-title">분야</div>
+          <ul class="nav-item-list" id="fieldList"></ul>
+
+          <div class="nav-group-title">연도 범위</div>
+          <div class="year-input-row">
+            <input type="number" id="yearFrom" placeholder="1997">
+            <span>–</span>
+            <input type="number" id="yearTo" placeholder="2026">
+            <button id="yearApply">적용</button>
+          </div>
+        </aside>
+
+        <main class="col-feed">
+          <div class="feed-header">
+            <h2 class="feed-title" id="feedTitleComp">전체 대회 (시대순)</h2>
+            <button class="clear-btn" id="clearFilterComp" style="display:none;">필터 해제 ×</button>
+          </div>
+          <div id="feedListComp"></div>
+        </main>
+
+        <aside class="col-preview" id="colPreviewComp"></aside>
+      </div>
+
+      <!-- ===================== VIEW 3: 인물·관계망 = 인물(Persons) ===================== -->
+      <div class="view workspace" id="view-authorities">
+        <aside class="col-nav">
+          <div class="nav-group-title">구분</div>
+          <ul class="nav-item-list" id="authTypeList"></ul>
+
+          <div class="nav-group-title">상설 색인</div>
+          <ul class="nav-item-list">
+            <li><button class="nav-item static">교수진·안무가</button></li>
+            <li><button class="nav-item static">동문·수상자</button></li>
+            <li><button class="nav-item static">소속 무용단</button></li>
+          </ul>
+          <div class="hint-note">이력(재직/역할)은 여러 건이 쌓일 수 있습니다 — 학생→학생→교수로 이어지는 한석진 사례처럼, 하나의 인물 레코드에 시계열 이력을 복수로 붙입니다.</div>
+        </aside>
+
+        <main class="col-feed">
+          <div class="feed-header">
+            <h2 class="feed-title" id="feedTitleAuth">전체 인물·단체</h2>
+          </div>
+          <div id="feedListAuth"></div>
+        </main>
+
+        <aside class="col-preview" id="colPreviewAuth"></aside>
+      </div>
+
+      <!-- ===================== VIEW: 홈 ===================== -->
+      <div class="card-view" id="view-home">
+        <div class="card-view-header">
+          <h2>무용원 역사 아카이브</h2>
+          <p>1996년 개원부터 2026년 30주년까지, 무용원의 자료·인물·이벤트를 통합 색인합니다.</p>
+        </div>
+        <div class="hero-block" id="homeStats"></div>
+        <div class="card-view-header"><h2 style="font-size:15px;">기획전시 〈RE: MOVE ERA〉 — 4개 Zone</h2></div>
+        <div id="homeZones"></div>
+      </div>
+
+      <!-- ===================== VIEW: 기획전시 ===================== -->
+      <div class="card-view" id="view-exhibit-theme">
+        <div class="card-view-header">
+          <h2>기획전시 〈RE: MOVE ERA : 움직임의 시간들〉</h2>
+        </div>
+        <div id="exhibitZones"></div>
+      </div>
+
+      <!-- ===================== VIEW: 사료 매체 (Item Types) ===================== -->
+      <div class="card-view" id="view-itemtypes">
+        <div class="card-view-header">
+          <h2>사료 매체 (Item Types)</h2>
+          <p>"컬렉션" 메뉴의 아이템들을 매체 유형 기준으로 재구성한 뷰입니다. 같은 데이터를 다른 축으로 보는 것뿐, 별도 자료가 아닙니다.</p>
+        </div>
+        <div class="card-grid" id="itemTypeGrid"></div>
+        <div class="card-detail-panel" id="itemTypeDetail"></div>
+      </div>
+
+      <!-- ===================== VIEW: 분야 및 경향 (Disciplines) ===================== -->
+      <div class="card-view" id="view-disciplines">
+        <div class="card-view-header">
+          <h2>분야 및 경향</h2>
+          <p>"연혁 및 이벤트"(콩쿨·대회)의 분야 필드를 기준으로 재구성했습니다. 카드를 클릭하면 해당 분야로 필터링된 대회 목록으로 이동합니다.</p>
+        </div>
+        <div class="card-grid" id="disciplineGrid"></div>
+      </div>
+
+      <!-- ===================== VIEW: 기관 및 단체 (Organizations) ===================== -->
+      <div class="card-view" id="view-orgs">
+        <div class="card-view-header">
+          <h2>기관 및 단체</h2>
+          <p>콩쿨·대회의 주최·주관 기관, 그리고 인물 색인의 단체(무용단) 레코드를 함께 모았습니다.</p>
+        </div>
+        <div class="card-grid" id="orgGrid"></div>
+        <div class="card-detail-panel" id="orgDetail"></div>
+      </div>
+
+      <!-- ===================== VIEW: 공간 및 무대 (Spaces) ===================== -->
+      <div class="card-view" id="view-spaces">
+        <div class="card-view-header">
+          <h2>공간 및 무대</h2>
+          <p>"연혁 및 이벤트"에 이미 등록된 장소 좌표 데이터를 지도 형태로 재사용했습니다. 점을 클릭하면 그 공간에서 열린 대회가 표시됩니다.</p>
+        </div>
+        <div class="venue-map-wrap" id="venueMap"></div>
+        <div class="card-detail-panel" id="venueDetail"></div>
+      </div>
+
+      <!-- ===================== VIEW: 타임캡슐 & 방명록 ===================== -->
+      <div class="card-view" id="view-capsule">
+        <div class="card-view-header">
+          <h2>타임캡슐 & 방명록</h2>
+          <p>7-A 타임캡슐(봉인형 투고) + 7-B 관람객 방명록. 신규 제작 콘텐츠로, 기존 수집 자료는 해당 없습니다.</p>
+        </div>
+        <div class="hero-block" id="capsuleStats"></div>
+        <div class="card-detail-panel">
+          <div class="relation-label">투고 흐름</div>
+          <ul style="padding-left:18px; font-size:12.5px; line-height:2; color:var(--black);">
+            <li>투고 — 이름/소속(선택, 익명 가능) · 메시지 · 공개범위 동의 — 상시 접수</li>
+            <li>봉인 — 제출 즉시 내용은 암호화되어 비공개 처리, 목록에는 건수만 노출</li>
+            <li>개봉 — 40주년(2036년 8월) 일괄 공개</li>
+          </ul>
+          <div class="info-note">개인정보(이름·소속)는 공개범위 동의를 받은 항목만 개봉 시 노출됩니다. 기술 구현이 어려울 경우 Omeka S Contribution/Guest 모듈 기반 방명록으로 대체됩니다.</div>
+        </div>
+      </div>
+
+      <!-- ===================== VIEW: 플레이스홀더(남은 카테고리) ===================== -->
+      <div class="view" id="view-placeholder">
+        <div class="empty-plate" id="placeholderText" style="max-width:360px; margin:auto;"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ============================================================
+   뷰 전환 (GAC 좌측 사이드바 매핑)
+============================================================ */
+const REAL_VIEWS = ['explore','competitions','authorities'];
+const CARD_VIEWS = ['home','exhibit-theme','itemtypes','disciplines','orgs','spaces','capsule'];
+
+const PLACEHOLDER_TEXT = {};
+
+function switchView(name){
+  document.querySelectorAll('.side-item').forEach(el=>{
+    el.classList.toggle('active', el.dataset.view===name);
+  });
+
+  document.querySelectorAll('.view').forEach(v=> v.classList.remove('active'));
+  document.querySelectorAll('.card-view').forEach(v=> v.classList.remove('active'));
+
+  if(REAL_VIEWS.includes(name)){
+    document.getElementById('view-'+name).classList.add('active');
+  } else if(CARD_VIEWS.includes(name)){
+    document.getElementById('view-'+name).classList.add('active');
+    if(name==='home') renderHome();
+    if(name==='exhibit-theme') renderExhibitTheme();
+    if(name==='itemtypes') renderItemTypes();
+    if(name==='disciplines') renderDisciplines();
+    if(name==='orgs') renderOrgs();
+    if(name==='spaces') renderSpaces();
+    if(name==='capsule') renderCapsule();
+  } else {
+    document.getElementById('placeholderText').textContent = PLACEHOLDER_TEXT[name] || '이 카테고리는 아직 실데이터가 채워지지 않았습니다.';
+    document.getElementById('view-placeholder').classList.add('active');
+  }
+}
+
+document.querySelectorAll('.side-item[data-view]').forEach(el=>{
+  el.addEventListener('click', ()=> switchView(el.dataset.view));
+});
+switchView('explore'); // 첫 화면은 컬렉션(사료 탐색)으로 시작
+
+document.getElementById('bannerToExhibit').addEventListener('click', ()=> switchView('exhibit-theme'));
+
+/* ============================================================
+   VIEW 1 데이터 — 사료 (컬렉션/아이템)
+============================================================ */
+const COLLECTIONS = [
+  { id:'performance',     name:'공연기획실',              total:1760 },
+  { id:'archive-office',  name:'기록관 (서초/석관)',       total:342 },
+  { id:'foreign-affairs', name:'대외협력과 (교류협정/AMA)', total:88 },
+  { id:'research-inst',   name:'이론과조교실 / 연구소',     total:112 },
+  { id:'personal',        name:'교수진 기증 컬렉션',        total:125 },
+  { id:'press',           name:'전문지 실물 (춤·몸 등)',    total:210 },
+];
+
+const ITEMS = [
+  { id:'ARC-1996-DOC-021', collection:'archive-office', year:1996,
+    title:'무용원 개원 자문위원회 위원 명단', tags:'기록관 · 서초 12 · 공문서', type:'인쇄 공문',
+    detail:{ persons:[], events:['초대교수 임용(1996)'],
+      provenance:{ 소장처:'기록관 · 서초 12', 디지털화:'2025년 사업단', 열람권한:'공개 가능' } } },
+  { id:'ARC-1996-PR-015', collection:'archive-office', year:1996,
+    title:'한국예술종합학교 무용원장에 김혜식씨 내정', tags:'기록관 · 석관 15 · 보도자료', type:'보도자료',
+    detail:{ persons:[['김혜식','초대 원장 내정']], events:['초대교수 임용(1996)'],
+      provenance:{ 소장처:'기록관 · 석관 15', 디지털화:'2025년 사업단', 열람권한:'공개 가능' } } },
+  { id:'ARC-1996-PF-001', collection:'personal', year:1996,
+    title:'제1회 무용원 정기공연 프로그램북', tags:'공연기획실 컬렉션 · 안무 남정호 · 예술감독 김혜식', type:'프로그램북',
+    detail:{ persons:[['김혜식','예술감독'],['남정호','안무']], events:['제1회 정기공연(1996)'],
+      provenance:{ 소장처:'공연기획실 컬렉션', 디지털화:'2025년 사업단', 열람권한:'공개 가능' } } },
+  { id:'ARC-1996-NP-021', collection:'archive-office', year:1996,
+    title:'연합 〈초점〉 무용원 졸속개원으로 수험생들 혼란', tags:'기록관 · 석관 21 · 비판 보도', type:'신문 스크랩',
+    detail:{ persons:[], events:['개원(1996)'],
+      provenance:{ 소장처:'기록관 · 석관 21', 디지털화:'2025년 사업단', 열람권한:'공개 가능' },
+      flag:'설립 초기 비판적 시선을 보여주는 핵심 사료' } },
+  { id:'ARC-2001-DC-039', collection:'performance', year:2001,
+    title:'프랑스 리옹 콘서바토리 무용단 한국공연', tags:'공연기획실 39 · 국제교류', type:'복합 사료군',
+    detail:{ persons:[], events:['리옹 콩세르바투아르 교류(2001)'],
+      provenance:{ 소장처:'공연기획실 39', 디지털화:'2025년 사업단', 열람권한:'공개 가능' },
+      flag:'학과교류로 인용되었으나 실제로는 국제교류 성격 — 4번 섹션과 중복 가능성' } },
+  { id:'ARC-2009-PL-022', collection:'archive-office', year:2009,
+    title:'무용원 전통예술원 차별화 지표', tags:'기록관 · 석관 22 · ⚠형태 불일치', type:'사진(문서 아님)',
+    detail:{ persons:[], events:['2009 한예종 사태'],
+      provenance:{ 소장처:'기록관 · 석관 22', 디지털화:'2025년 사업단', 열람권한:'재확인 필요' },
+      flag:'⚠ 분류표상 "형태·내용 불일치" 사례' } },
+  { id:'ARC-2020-EV-1413', collection:'performance', year:2020,
+    title:'졸업발표회·레퍼토리·실험무용제 (5개 행사 23건)', tags:'공연기획실 1413–1435 · 코로나 학사재편', type:'혼합 사료군',
+    detail:{ persons:[], events:['2020 상반기 공연 일정 재편'],
+      provenance:{ 소장처:'공연기획실 1413–1435', 디지털화:'2025년 사업단', 열람권한:'공개 가능' },
+      flag:'2020 상반기 공연 5건(23건)이 전부 6~7월로 밀림' } },
+  { id:'ARC-2026-EV-009', collection:'performance', year:2026,
+    title:'무용원 30주년 기념 공연 실황 및 학술 심포지엄 자료집', tags:'신규 수집 자료군 · 국립극장 해오름', type:'혼합 사료군',
+    detail:{ persons:[], events:['〈RE: MOVE ERA〉 기념공연(2026)'],
+      provenance:{ 소장처:'신규 수집(2026 사업단)', 디지털화:'2026년 사업단', 열람권한:'공개 가능' } } },
+];
+
+let activeCollection = null;
+let activeItemId = null;
+
+function filteredItems(){
+  return ITEMS.filter(i => !activeCollection || i.collection === activeCollection).sort((a,b)=> a.year - b.year);
+}
+
+function renderCollections(){
+  const wrap = document.getElementById('collectionList');
+  wrap.innerHTML = COLLECTIONS.map(c=>{
+    return `<li><button class="nav-item ${activeCollection===c.id?'is-selected':''}" data-coll="${c.id}">
+      <span>${c.name}</span><span class="count-tag">${c.total.toLocaleString()}</span>
+    </button></li>`;
+  }).join('');
+  wrap.querySelectorAll('[data-coll]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      activeCollection = activeCollection === el.dataset.coll ? null : el.dataset.coll;
+      renderExplore();
+    });
+  });
+  document.querySelectorAll('[data-goto-comp]').forEach(el=> el.addEventListener('click', ()=> switchView('competitions')));
+}
+
+function renderExploreFeed(){
+  const list = filteredItems();
+  document.getElementById('headerCount').innerHTML = `누적 사료 <strong>${ITEMS.length.toLocaleString()}건 샘플 (전체 1,760+ 건 중)</strong> 관리 중`;
+  document.getElementById('feedTitleExplore').textContent = activeCollection ? COLLECTIONS.find(c=>c.id===activeCollection).name : '전체 사료 연대기';
+  document.getElementById('clearFilterExplore').style.display = activeCollection ? 'inline-flex' : 'none';
+
+  const feed = document.getElementById('feedListExplore');
+  if(list.length===0){ feed.innerHTML = `<div class="empty-feed">이 컬렉션의 샘플 사료가 아직 없습니다.</div>`; return; }
+  feed.innerHTML = list.map(item=>`
+    <button class="sheet-entry ${item.id===activeItemId?'is-active':''}" data-item="${item.id}">
+      <div class="entry-year">${item.year}</div>
+      <div class="entry-main"><h3>${item.title}</h3><div class="entry-tags">${item.tags}</div></div>
+    </button>
+  `).join('');
+  feed.querySelectorAll('[data-item]').forEach(el=>{
+    el.addEventListener('click', ()=>{ activeItemId = el.dataset.item; renderExplore(); });
+  });
+}
+
+function renderExplorePreview(){
+  const wrap = document.getElementById('colPreviewExplore');
+  const item = ITEMS.find(i=>i.id===activeItemId);
+  if(!item){
+    wrap.innerHTML = `<div class="empty-state-box"><div class="empty-plate">사료를 선택하면 원본 뷰어와<br>상세 메타데이터가 표시됩니다.</div></div>`;
+    return;
+  }
+  wrap.innerHTML = `
+    <div class="detail-header">
+      <div class="kicker">사료 원본 상세</div>
+      <h2 class="detail-title">${item.title}</h2>
+      <div class="registry-code">등록식별자: ${item.id}</div>
+    </div>
+    <div class="viewer-plate has-diagonal">
+      <div class="plate-inner"><span class="plate-status">디지털 사본 뷰어 연동 영역</span><span class="plate-spec">${item.type} · ${item.year}</span></div>
+    </div>
+    <div class="relation-grid">
+      <div>
+        <div class="relation-label">연결된 인물</div>
+        <ul class="relation-list">
+          ${item.detail.persons.length ? item.detail.persons.map(([n,r])=>`<li><span class="relation-anchor" data-jump-auth2="${n}" style="cursor:pointer;">${n}</span><span class="role">${r}</span></li>`).join('') : '<li class="relation-empty">연결된 인물 없음</li>'}
+        </ul>
+      </div>
+      <div>
+        <div class="relation-label">소속 이벤트</div>
+        <ul class="relation-list">
+          ${item.detail.events.map(e=>`<li><span class="relation-anchor">${e}</span></li>`).join('')}
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="relation-label">출처 및 소장권리</div>
+      <dl class="provenance-specs">
+        ${Object.entries(item.detail.provenance).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}
+      </dl>
+    </div>
+    ${item.detail.flag ? `<div class="flag-note">${item.detail.flag}</div>` : ''}
+  `;
+  wrap.querySelectorAll('[data-jump-auth2]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const target = ACTORS.find(a=>a.name===el.dataset.jumpAuth2);
+      if(target){ activeAuthId = target.id; switchView('authorities'); renderAuth(); }
+    });
+  });
+}
+
+function renderExplore(){ renderCollections(); renderExploreFeed(); renderExplorePreview(); }
+document.getElementById('clearFilterExplore').addEventListener('click', ()=>{ activeCollection = null; renderExplore(); });
+
+/* ============================================================
+   VIEW 2 데이터 — 콩쿨·대회 (+ 장소 좌표 + 수상사건 연동)
+============================================================ */
+const VENUES = {
+  v_세종문화회관소극장: { name:'세종문화회관 소극장', lat:37.5725, lng:126.9756 },
+  v_신국립극장_도쿄: { name:'신국립극장 (도쿄)', lat:35.6895, lng:139.6917 },
+  v_뉴욕링컨센터앨리스툴리홀: { name:'뉴욕 링컨센터 앨리스툴리홀', lat:40.7733, lng:-73.9822 },
+  v_바르나야외극장: { name:'바르나 야외극장', lat:43.2088, lng:27.9295 },
+  v_국립극장달오름극장: { name:'국립극장 달오름극장', lat:37.5558, lng:127.0051 },
+  v_예술의전당토월극장: { name:'예술의전당 CJ토월극장', lat:37.4782, lng:127.0125 },
+  v_볼쇼이극장신관: { name:'볼쇼이극장 신관', lat:55.7617, lng:37.6190 },
+  v_상하이대극장: { name:'상하이 대극장', lat:31.2352, lng:121.4757 },
+  v_스위스로잔보되극장: { name:'로잔 보되 극장', lat:46.5161, lng:6.5786 },
+  v_국립극장_프라하: { name:'프라하 국립극장', lat:50.0811, lng:14.4136 },
+  v_상명아트센터계당홀: { name:'상명아트센터 계당홀', lat:37.6015, lng:126.9551 },
+  v_핀란드국립오페라하우스: { name:'핀란드 국립오페라하우스', lat:60.1824, lng:24.9312 },
+  v_아트스케이프극장_케이프타운: { name:'아트스케이프 극장 (케이프타운)', lat:-33.9189, lng:18.4287 },
+};
+
+const COMPETITIONS = [
+  { id:'c_동아무용콩쿠르_1998', name:'동아무용콩쿠르', round:28, type:'국내 콩쿠르', fields:['발레','현대무용'],
+    start:'1998-06-09', end:'1998-06-11', host:'동아일보사', organizer:'동아일보사', venue:'v_세종문화회관소극장' },
+  { id:'c_아시아태평양국제발레콩쿠르_1999', name:'아시아 태평양 국제발레콩쿠르', round:7, type:'국제 콩쿠르', fields:['발레'],
+    start:'1999-07-28', end:'1999-08-01', host:'아시아태평양발레협회 | 일본발레협회', organizer:'아시아태평양국제발레콩쿠르조직위원회', venue:'v_신국립극장_도쿄' },
+  { id:'c_뉴욕국제발레콩쿠르_2000', name:'뉴욕 국제발레콩쿠르', round:6, type:'국제 콩쿠르', fields:['발레'],
+    start:'2000-06-19', end:'2000-06-25', host:'NYIBC', organizer:'NYIBC조직위원회', venue:'v_뉴욕링컨센터앨리스툴리홀' },
+  { id:'c_동아무용콩쿠르_2003', name:'동아무용콩쿠르', round:33, type:'국내 콩쿠르', fields:['발레','창작','한국무용','현대무용'],
+    start:'2003-06-10', end:'2003-06-13', host:'창악과비평 | 무용예술상제정위원회', organizer:'무용예술상운영위원회', venue:'v_세종문화회관소극장', hasAward:true },
+  { id:'c_불가리아바르나국제발레콩쿠르_2004', name:'불가리아 바르나 국제 발레 콩쿠르', round:null, type:'국제 콩쿠르', fields:['발레'],
+    start:'2004-07-15', end:'2004-07-30', host:'바르나국제발레콩쿠르재단', organizer:'바르나국제발레콩쿠르조직위원회', venue:'v_바르나야외극장' },
+  { id:'c_서울무용제_2005', name:'서울무용제', round:26, type:'국내 콩쿠르', fields:[],
+    start:'2005-06-10', end:'2005-06-26', host:'사단법인한국무용협회', organizer:'서울무용제집행위원회', venue:'v_국립극장달오름극장' },
+  { id:'c_서울국제무용콩쿠르_2006', name:'서울국제무용콩쿠르', round:3, type:'국제 콩쿠르', fields:['발레','컨템포러리'],
+    start:'2006-04-01', end:'2006-08-29', host:'사단법인서울국제문화교류회', organizer:'서울국제무용콩쿠르조직위원회', venue:'v_예술의전당토월극장' },
+  { id:'c_브누아드라당스_2006', name:'브누아 드 라 당스', round:14, type:'국제 콩쿠르', fields:[],
+    start:'2006-04-25', end:'2006-04-26', host:'국제무용연맹', organizer:'—', venue:'v_볼쇼이극장신관' },
+  { id:'c_상하이국제발레콩쿠르_2007', name:'상하이국제발레콩쿠르', round:4, type:'국제 콩쿠르', fields:['발레'],
+    start:'2007-07-28', end:'2007-08-03', host:'중국문화부 | 상하이시인민정부', organizer:'상하이국제발레콩쿠르조직위원회', venue:'v_상하이대극장' },
+  { id:'c_로잔국제발레콩쿠르_2005', name:'로잔 국제발레콩쿠르', round:33, type:'국제 콩쿠르', fields:['발레'],
+    start:'2005-01-30', end:'2005-02-06', host:'스위스무용예술진흥재단', organizer:'로잔국제발레콩쿠르집행위원회', venue:'v_스위스로잔보되극장' },
+  { id:'c_프라하국제발레콩쿠르_2002', name:'프라하 국제발레콩쿠르', round:1, type:'국제 콩쿠르', fields:['발레'],
+    start:'2002-08-03', end:'2002-08-10', host:'프라하국제발레콩쿠르협회', organizer:'프라하국제발레콩쿠르조직위원회', venue:'v_국립극장_프라하' },
+  { id:'c_헬싱키국제발레콩쿠르_2001', name:'헬싱키 국제발레콩쿠르', round:4, type:'국제 콩쿠르', fields:['발레'],
+    start:'2001-05-26', end:'2001-06-05', host:'헬싱키국제발레콩쿠르협회', organizer:'헬싱키국제발레콩쿠르조직위원회 | 핀란드국립오페라발레단', venue:'v_핀란드국립오페라하우스' },
+  { id:'c_남아공국제무용콩쿠르_2010', name:'남아공 국제무용콩쿠르', round:null, type:'국제 콩쿠르', fields:[],
+    start:'2010-07-12', end:'2010-07-17', host:'SAIBC재단', organizer:'SAIBC조직위원회', venue:'v_아트스케이프극장_케이프타운' },
+  { id:'c_서울국제무용콩쿠르_2019', name:'서울국제무용콩쿠르', round:16, type:'국제 콩쿠르', fields:['민족무용','발레','안무','창작','한국무용','현대무용'],
+    start:'2019-07-05', end:'2019-07-19', host:'서울국제문화교류회', organizer:'서울국제무용콩쿠르조직위원회', venue:'v_상명아트센터계당홀' },
+  { id:'c_코리아국제발레콩쿠르_2020', name:'코리아 국제 발레콩쿠르', round:13, type:'국제 콩쿠르', fields:['발레'],
+    start:'2020-06-24', end:'2020-06-28', host:'사코리아국제발레콩쿠르 | 한국발레협회', organizer:'코리아국제발레콩쿠르조직위원회', venue:'v_상명아트센터계당홀' },
+];
+
+const AWARDS = [
+  { id:'awardevent_000001', subject:'김설진', subjectType:'인물', comp:'c_동아무용콩쿠르_2003', field:'현대무용' },
+  { id:'awardevent_000002', subject:'LDP 무용단', subjectType:'단체', comp:'c_동아무용콩쿠르_2003', field:'안무' },
+];
+
+const TYPES = [...new Set(COMPETITIONS.map(c=>c.type))];
+const FIELDS = [...new Set(COMPETITIONS.flatMap(c=>c.fields))].sort();
+
+let activeType = null, activeField = null, yearRange = null, activeCompId = null;
+function getYear(c){ return parseInt(c.start.slice(0,4)); }
+
+function filteredComps(){
+  return COMPETITIONS.filter(c=>{
+    if(activeType && c.type!==activeType) return false;
+    if(activeField && !c.fields.includes(activeField)) return false;
+    if(yearRange){ const y=getYear(c); if(y<yearRange[0]||y>yearRange[1]) return false; }
+    return true;
+  }).sort((a,b)=> getYear(a)-getYear(b));
+}
+
+function renderCompNav(){
+  const typeWrap = document.getElementById('typeList');
+  typeWrap.innerHTML = TYPES.map(t=>{
+    const n = COMPETITIONS.filter(c=>c.type===t).length;
+    return `<li><button class="nav-item ${activeType===t?'is-selected':''}" data-type="${t}"><span>${t}</span><span class="count-tag">${n}</span></button></li>`;
+  }).join('');
+  typeWrap.querySelectorAll('[data-type]').forEach(el=>{
+    el.addEventListener('click', ()=>{ activeType = activeType===el.dataset.type?null:el.dataset.type; renderComp(); });
+  });
+
+  const fieldWrap = document.getElementById('fieldList');
+  fieldWrap.innerHTML = FIELDS.map(f=>{
+    const n = COMPETITIONS.filter(c=>c.fields.includes(f)).length;
+    return `<li><button class="nav-item ${activeField===f?'is-selected':''}" data-field="${f}"><span>${f}</span><span class="count-tag">${n}</span></button></li>`;
+  }).join('');
+  fieldWrap.querySelectorAll('[data-field]').forEach(el=>{
+    el.addEventListener('click', ()=>{ activeField = activeField===el.dataset.field?null:el.dataset.field; renderComp(); });
+  });
+}
+
+function renderCompFeed(){
+  const list = filteredComps();
+  document.getElementById('feedTitleComp').textContent = (activeType||activeField||yearRange) ? '필터링된 대회' : '전체 대회 (시대순)';
+  document.getElementById('clearFilterComp').style.display = (activeType||activeField||yearRange) ? 'inline-flex' : 'none';
+  const feed = document.getElementById('feedListComp');
+  if(list.length===0){ feed.innerHTML = `<div class="empty-feed">이 조건에 해당하는 샘플 대회가 없습니다.</div>`; return; }
+  feed.innerHTML = list.map(c=>`
+    <button class="sheet-entry ${c.id===activeCompId?'is-active':''}" data-id="${c.id}">
+      <div class="entry-year">${getYear(c)}${c.round?`<br>${c.round}회`:''}</div>
+      <div class="entry-main"><h3>${c.name}</h3><div class="entry-tags">${c.type} · ${VENUES[c.venue]?.name || c.venue}${c.fields.length? ' · '+c.fields.join('/'):''}</div></div>
+    </button>
+  `).join('');
+  feed.querySelectorAll('[data-id]').forEach(el=>{
+    el.addEventListener('click', ()=>{ activeCompId = el.dataset.id; renderComp(); });
+  });
+}
+
+function projectDot(lat,lng){ return { x:(lng+180)/360*100, y:(90-lat)/180*100 }; }
+
+function renderCompPreview(){
+  const wrap = document.getElementById('colPreviewComp');
+  const c = COMPETITIONS.find(c=>c.id===activeCompId);
+  if(!c){
+    wrap.innerHTML = `<div class="empty-state-box"><div class="empty-plate">대회를 선택하면 개최지 지도와<br>주최·수상 정보가 표시됩니다.</div></div>`;
+    return;
+  }
+  const venue = VENUES[c.venue];
+  const dot = venue ? projectDot(venue.lat, venue.lng) : null;
+  const relatedAwards = AWARDS.filter(a=>a.comp===c.id);
+  wrap.innerHTML = `
+    <div class="detail-header">
+      <div class="kicker">대회 상세</div>
+      <h2 class="detail-title">${c.name}${c.round?` <span style="color:var(--text-muted); font-weight:500; font-size:13px;">제${c.round}회</span>`:''}</h2>
+      <div class="registry-code">등록식별자: ${c.id}</div>
+    </div>
+    ${dot ? `<div class="map-plate"><div class="map-dot" style="left:${dot.x}%; top:${dot.y}%;"></div><div class="map-caption">${venue.name} (${venue.lat.toFixed(2)}, ${venue.lng.toFixed(2)})</div></div>` : ''}
+    <dl class="field-specs">
+      <dt>기간</dt><dd>${c.start} – ${c.end}</dd>
+      <dt>유형</dt><dd>${c.type}${c.fields.length? ' · '+c.fields.join(', '):''}</dd>
+      <dt>주최</dt><dd>${c.host}</dd>
+      <dt>주관</dt><dd>${c.organizer}</dd>
+      <dt>장소</dt><dd>${venue ? venue.name : c.venue}</dd>
+    </dl>
+    <div class="relation-grid single">
+      <div>
+        <div class="relation-label">연결된 수상 사건 (Award Event)</div>
+        <ul class="relation-list">
+          ${relatedAwards.length ? relatedAwards.map(a=>`<li><span class="relation-anchor" data-jump-auth="${a.subject}" style="cursor:pointer;">${a.subject}</span><span class="role">${a.subjectType} · ${a.field} 부문</span></li>`).join('') : '<li class="relation-empty">연결된 수상 사건 데이터 없음 (샘플 미포함)</li>'}
+        </ul>
+      </div>
+    </div>
+    ${relatedAwards.length ? `<div class="award-note">이 수상 기록은 "인물·관계망" 인물 상세페이지에서도 동일 레코드가 수상 이력으로 역참조됩니다. 위 이름을 눌러 이동해보세요.</div>` : ''}
+    <div class="info-note">콩쿨·대회 / 장소 / 수상사건 시트 실값 발췌 샘플. 좌표는 세계지도 비례 배치(정거방형 투영 근사)입니다.</div>
+  `;
+
+  wrap.querySelectorAll('[data-jump-auth]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const target = ACTORS.find(a=>a.name===el.dataset.jumpAuth);
+      if(target){ activeAuthId = target.id; switchView('authorities'); renderAuth(); }
+    });
+  });
+}
+
+function renderComp(){ renderCompNav(); renderCompFeed(); renderCompPreview(); }
+
+document.getElementById('clearFilterComp').addEventListener('click', ()=>{
+  activeType=null; activeField=null; yearRange=null;
+  document.getElementById('yearFrom').value=''; document.getElementById('yearTo').value='';
+  renderComp();
+});
+document.getElementById('yearApply').addEventListener('click', ()=>{
+  const from = parseInt(document.getElementById('yearFrom').value);
+  const to = parseInt(document.getElementById('yearTo').value);
+  if(from && to){ yearRange = [from, to]; renderComp(); }
+});
+document.querySelectorAll('[data-goto-auth]').forEach(el=> el.addEventListener('click', ()=> switchView('authorities')));
+
+/* ============================================================
+   VIEW 3 데이터 — 인물·관계망 (행위자 + 인물이력관리 + 기관)
+   기존 ITEMS / COMPETITIONS / AWARDS 데이터와 실제로 교차 참조합니다.
+============================================================ */
+const ACTORS = [
+  {
+    id:'p_김혜식', name:'김혜식', kind:'인물',
+    history:[
+      { 소속:'한국예술종합학교 무용원', 학적:'해당없음', 직위:'교수', 역할:'예술감독', 시작:'1996', 종료:'—', 비고:'초대 원장' },
+    ]
+  },
+  {
+    id:'p_남정호', name:'남정호', kind:'인물',
+    history:[
+      { 소속:'한국예술종합학교 무용원 창작과', 학적:'해당없음', 직위:'교수', 역할:'안무가', 시작:'1996', 종료:'—', 비고:'' },
+    ]
+  },
+  {
+    id:'p_한석진', name:'한석진', kind:'인물',
+    history:[
+      { 소속:'한국예술종합학교 무용원', 학적:'예술사', 직위:'학생', 역할:'이론가', 시작:'2002-03-02', 종료:'2007-02-28', 비고:'무용 미학' },
+      { 소속:'한국예술종합학교 무용원', 학적:'전문사', 직위:'학생', 역할:'이론가', 시작:'—', 종료:'—', 비고:'무용 미학' },
+      { 소속:'한국예술종합학교 무용원', 학적:'해당없음', 직위:'교수', 역할:'이론가', 시작:'—', 종료:'—', 비고:'무용 미학 · 30주년 아카이브 전시 총괄' },
+    ]
+  },
+  {
+    id:'p_김설진', name:'김설진', kind:'인물',
+    history:[
+      { 소속:'—', 학적:'—', 직위:'—', 역할:'무용수', 시작:'—', 종료:'—', 비고:'현대무용 부문 활동' },
+    ]
+  },
+  {
+    id:'g_LDP무용단', name:'LDP 무용단', kind:'단체(무용단)',
+    history:[
+      { 소속:'한예종 동문 창작단체', 학적:'—', 직위:'—', 역할:'안무 단체', 시작:'2001', 종료:'—', 비고:'동문 창작단체' },
+    ]
+  },
+];
+
+let activeAuthType = null;
+let activeAuthId = null;
+const AUTH_TYPES = [...new Set(ACTORS.map(a=>a.kind))];
+
+function renderAuthNav(){
+  const wrap = document.getElementById('authTypeList');
+  wrap.innerHTML = AUTH_TYPES.map(t=>{
+    const n = ACTORS.filter(a=>a.kind===t).length;
+    return `<li><button class="nav-item ${activeAuthType===t?'is-selected':''}" data-authtype="${t}"><span>${t}</span><span class="count-tag">${n}</span></button></li>`;
+  }).join('');
+  wrap.querySelectorAll('[data-authtype]').forEach(el=>{
+    el.addEventListener('click', ()=>{ activeAuthType = activeAuthType===el.dataset.authtype?null:el.dataset.authtype; renderAuth(); });
+  });
+}
+
+function filteredActors(){
+  return ACTORS.filter(a=> !activeAuthType || a.kind===activeAuthType);
+}
+
+/* 교차 참조 헬퍼 — 이 인물/단체 이름이 ITEMS의 persons, COMPETITIONS 참여, AWARDS subject에 등장하는지 찾기 */
+function crossRefItems(name){
+  return ITEMS.filter(i => i.detail.persons.some(([n])=> n===name));
+}
+function crossRefAwards(name){
+  return AWARDS.filter(a => a.subject===name);
+}
+
+function renderAuthFeed(){
+  const list = filteredActors();
+  const feed = document.getElementById('feedListAuth');
+  document.getElementById('feedTitleAuth').textContent = activeAuthType ? activeAuthType : '전체 인물·단체';
+  feed.innerHTML = list.map(a=>{
+    const nAwards = crossRefAwards(a.name).length;
+    const nItems = crossRefItems(a.name).length;
+    return `<button class="sheet-entry ${a.id===activeAuthId?'is-active':''}" data-auth="${a.id}" style="grid-template-columns: 60px 1fr;">
+      <div class="entry-year">${a.kind==='인물'?'인물':'단체'}</div>
+      <div class="entry-main">
+        <h3>${a.name}</h3>
+        <div class="entry-tags">이력 ${a.history.length}건 · 연결 사료 ${nItems}건 · 수상 ${nAwards}건</div>
+      </div>
+    </button>`;
+  }).join('');
+  feed.querySelectorAll('[data-auth]').forEach(el=>{
+    el.addEventListener('click', ()=>{ activeAuthId = el.dataset.auth; renderAuth(); });
+  });
+}
+
+function renderAuthPreview(){
+  const wrap = document.getElementById('colPreviewAuth');
+  const a = ACTORS.find(a=>a.id===activeAuthId);
+  if(!a){
+    wrap.innerHTML = `<div class="empty-state-box"><div class="empty-plate">인물 또는 단체를 선택하면<br>이력·연결 사료·수상 기록이 표시됩니다.</div></div>`;
+    return;
+  }
+  const relatedItems = crossRefItems(a.name);
+  const relatedAwards = crossRefAwards(a.name);
+
+  wrap.innerHTML = `
+    <div class="detail-header">
+      <div class="kicker">${a.kind} 상세</div>
+      <h2 class="detail-title">${a.name}</h2>
+      <div class="registry-code">등록식별자: ${a.id}</div>
+    </div>
+
+    <div>
+      <div class="relation-label">이력 (소속 · 직위 · 역할 · 기간)</div>
+      <ul class="relation-list" style="margin-bottom:16px;">
+        ${a.history.map(h=>`
+          <li style="border-bottom:1px solid var(--rule); padding-bottom:7px; margin-bottom:7px;">
+            <span class="relation-anchor">${h.소속}</span>
+            <span class="role">${h.직위} · ${h.역할} · ${h.시작}${h.종료 && h.종료!=='—' ? ' ~ '+h.종료 : ''}</span>
+            ${h.비고 ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${h.비고}</div>` : ''}
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+
+    <div class="relation-grid single">
+      <div>
+        <div class="relation-label">연결된 사료 (Item)</div>
+        <ul class="relation-list">
+          ${relatedItems.length ? relatedItems.map(i=>`<li><span class="relation-anchor">${i.title}</span><span class="role">${i.id}</span></li>`).join('') : '<li class="relation-empty">이 프로토타입 샘플에서 연결된 사료 없음</li>'}
+        </ul>
+      </div>
+    </div>
+
+    <div class="relation-grid single">
+      <div>
+        <div class="relation-label">수상 이력 (Award Event · 콩쿨·대회 탭과 역참조)</div>
+        <ul class="relation-list">
+          ${relatedAwards.length ? relatedAwards.map(aw=>{
+            const comp = COMPETITIONS.find(c=>c.id===aw.comp);
+            return `<li><span class="relation-anchor" data-jump-comp="${aw.comp}" style="cursor:pointer;">${comp ? comp.name+' ('+getYear(comp)+')' : aw.comp}</span><span class="role">${aw.field} 부문</span></li>`;
+          }).join('') : '<li class="relation-empty">연결된 수상 이력 없음</li>'}
+        </ul>
+      </div>
+    </div>
+
+    ${relatedAwards.length ? `<div class="award-note">"콩쿨·대회" 탭의 수상 사건 시트와 실제로 연동된 레코드입니다. 위 항목을 누르면 해당 대회 상세로 이동합니다.</div>` : ''}
+    <div class="info-note">행위자 / 인물이력관리 / 기관 시트 실값 발췌 샘플입니다. 한석진 사례는 학생(예술사)→학생(전문사)→교수로 이어지는 시계열 이력을 그대로 반영했습니다.</div>
+  `;
+
+  wrap.querySelectorAll('[data-jump-comp]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      activeCompId = el.dataset.jumpComp;
+      switchView('competitions');
+      renderComp();
+    });
+  });
+}
+
+function renderAuth(){ renderAuthNav(); renderAuthFeed(); renderAuthPreview(); }
+
+/* ============================================================
+   신규 뷰 — 홈 / 기획전시 / 사료매체 / 분야 / 기관 / 공간 / 타임캡슐
+   전부 기존 ITEMS / COMPETITIONS / VENUES / ACTORS / AWARDS를 재사용합니다.
+============================================================ */
+const ZONES = [
+  { num:'Zone 1', title:'REmember 이탈의 몸짓', desc:'무용원이 어떻게 첫걸음을 뗐는지, 그 출발점을 포착합니다.',
+    items:['설립 추진 과정 서사 (1-A)', '"졸속 개원" 비판과 혼란 서사 (1-B)', '2009 한예종 사태 (1-C)', '초대교수 임용 당시 분위기 (1-B)'] },
+  { num:'Zone 2', title:'MOVEment 움직임의 궤적', desc:'한국무용·발레·현대무용 삼분법에서 벗어난 무용원 커리큘럼의 독창성을 시각화합니다.',
+    items:['커리큘럼 시계열 인포그래픽 (2-A, 2-B)', '교육경향 클러스터 (2-C)', '바우하우스·울름 레퍼런스 네트워크맵', '교과과정 개정사 서술'] },
+  { num:'Zone 3', title:'ERA of Breakout 도약의 시간', desc:'교육적 토대 위에서 국내외로 확장된 무용원의 활동과 동문 성과를 보여줍니다.',
+    items:['교내 활동(공연·연구) 흐름 서사 (3번)', '국제교류·해외공연 확장 서사 (4번)', 'AMA 장학생 스토리카드', '동문 성과·지도 시각화 (5번)'] },
+  { num:'Zone 4', title:'RE: MOVE 새로운 중력을 찾아서', desc:'역사를 아카이빙하는 관점 자체를 다루는 참여형 공간입니다.',
+    items:['아카이브 과정 기록 (6번)', '타임캡슐/방명록 UI 경험 (7번)', '관람객 참여형 해석 콘텐츠'] },
+];
+
+function renderHome(){
+  document.getElementById('homeStats').innerHTML = `
+    <div class="hero-stat"><div class="hs-num">${ITEMS.length}</div><div class="hs-label">등록 사료 (샘플)</div></div>
+    <div class="hero-stat"><div class="hs-num">${COMPETITIONS.length}</div><div class="hs-label">등록 대회 (샘플)</div></div>
+    <div class="hero-stat"><div class="hs-num">${ACTORS.length}</div><div class="hs-label">인물·단체</div></div>
+    <div class="hero-stat"><div class="hs-num">${Object.keys(VENUES).length}</div><div class="hs-label">개최 공간</div></div>
+    <div class="hero-stat"><div class="hs-num">4</div><div class="hs-label">기획전시 Zone</div></div>
+  `;
+  document.getElementById('homeZones').innerHTML = ZONES.map(z=>`
+    <div class="zone-card" data-zone-jump="1">
+      <div class="zc-num">${z.num}</div>
+      <div class="zc-title">${z.title}</div>
+    </div>
+  `).join('');
+  document.querySelectorAll('[data-zone-jump]').forEach(el=> el.addEventListener('click', ()=> switchView('exhibit-theme')));
+}
+
+let openZoneIdx = null;
+function renderExhibitTheme(){
+  const wrap = document.getElementById('exhibitZones');
+  wrap.innerHTML = ZONES.map((z,i)=>`
+    <div class="zone-card" data-zone-idx="${i}">
+      <div class="zc-num">${z.num}</div>
+      <div class="zc-title">${z.title}</div>
+    </div>
+  `).join('');
+}
+
+function renderItemTypes(){
+  const types = [...new Set(ITEMS.map(i=>i.type))];
+  const grid = document.getElementById('itemTypeGrid');
+  grid.innerHTML = types.map(t=>{
+    const n = ITEMS.filter(i=>i.type===t).length;
+    return `<button class="grid-card" data-itype="${t}"><div class="gc-count">${n}</div><div class="gc-title">${t}</div><div class="gc-sub">건</div></button>`;
+  }).join('');
+  grid.querySelectorAll('[data-itype]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      grid.querySelectorAll('.grid-card').forEach(c=>c.classList.remove('is-active'));
+      el.classList.add('is-active');
+      const list = ITEMS.filter(i=>i.type===el.dataset.itype);
+      document.getElementById('itemTypeDetail').innerHTML = `
+        <div class="relation-label">${el.dataset.itype} — ${list.length}건</div>
+        <ul class="relation-list">
+          ${list.map(i=>`<li><span class="relation-anchor" data-jump-item="${i.id}" style="cursor:pointer;">${i.title}</span><span class="role">${i.year} · ${i.id}</span></li>`).join('')}
+        </ul>`;
+      document.querySelectorAll('[data-jump-item]').forEach(a=>{
+        a.addEventListener('click', ()=>{
+          const it = ITEMS.find(x=>x.id===a.dataset.jumpItem);
+          if(it){ activeCollection = it.collection; activeItemId = it.id; switchView('explore'); renderExplore(); }
+        });
+      });
+    });
+  });
+}
+
+function renderDisciplines(){
+  const fields = [...new Set(COMPETITIONS.flatMap(c=>c.fields))].sort();
+  const grid = document.getElementById('disciplineGrid');
+  grid.innerHTML = fields.map(f=>{
+    const n = COMPETITIONS.filter(c=>c.fields.includes(f)).length;
+    return `<button class="grid-card" data-disc="${f}"><div class="gc-count">${n}</div><div class="gc-title">${f}</div><div class="gc-sub">대회</div></button>`;
+  }).join('');
+  grid.querySelectorAll('[data-disc]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      activeField = el.dataset.disc; activeType = null; yearRange = null;
+      switchView('competitions'); renderComp();
+    });
+  });
+}
+
+const ORGS = [
+  { id:'o_동아일보사', name:'동아일보사', matchName:'동아일보사', type:'언론사' },
+  { id:'o_서울국제문화교류회', name:'서울국제문화교류회 (SIDC)', matchName:'서울국제문화교류회', type:'사단법인' },
+  { id:'o_국제무용연맹', name:'국제무용연맹', matchName:'국제무용연맹', type:'국제기구' },
+  { id:'o_NYIBC', name:'New York International Ballet Competition (NYIBC)', matchName:'NYIBC', type:'협회' },
+  { id:'o_바르나국제발레콩쿠르재단', name:'바르나 국제발레콩쿠르재단', matchName:'바르나국제발레콩쿠르재단', type:'재단' },
+  { id:'o_SAIBC재단', name:'SAIBC재단 (남아프리카 국제 발레 콩쿠르)', matchName:'SAIBC재단', type:'재단' },
+  { id:'o_한국무용협회', name:'한국무용협회', matchName:'한국무용협회', type:'사단법인' },
+  { id:'g_LDP무용단', name:'LDP 무용단', matchName:'LDP무용단__no_match', type:'동문 창작단체 (인물 색인과 연동)' },
+];
+
+function orgRelatedComps(org){
+  return COMPETITIONS.filter(c => c.host.includes(org.matchName) || c.organizer.includes(org.matchName));
+}
+
+function renderOrgs(){
+  const grid = document.getElementById('orgGrid');
+  grid.innerHTML = ORGS.map(o=>{
+    const n = orgRelatedComps(o).length;
+    return `<button class="grid-card" data-org="${o.id}"><div class="gc-count">${n}</div><div class="gc-title">${o.name}</div><div class="gc-sub">${o.type}</div></button>`;
+  }).join('');
+  grid.querySelectorAll('[data-org]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      grid.querySelectorAll('.grid-card').forEach(c=>c.classList.remove('is-active'));
+      el.classList.add('is-active');
+      const org = ORGS.find(o=>o.id===el.dataset.org);
+      const comps = orgRelatedComps(org);
+      const linkedActor = ACTORS.find(a=>a.name===org.name || a.id===org.id);
+      document.getElementById('orgDetail').innerHTML = `
+        <div class="relation-label">${org.name} — 주최/주관 대회 ${comps.length}건</div>
+        <ul class="relation-list">
+          ${comps.length ? comps.map(c=>`<li><span class="relation-anchor" data-jump-org-comp="${c.id}" style="cursor:pointer;">${c.name} (${getYear(c)})</span></li>`).join('') : '<li class="relation-empty">연결된 대회 샘플 없음</li>'}
+        </ul>
+        ${linkedActor ? `<div class="award-note">이 단체는 "인물·관계망" 색인에도 동일 레코드가 있습니다. 클릭하면 이동합니다.</div>` : ''}
+      `;
+      if(linkedActor){
+        document.getElementById('orgDetail').querySelector('.award-note').style.cursor='pointer';
+        document.getElementById('orgDetail').querySelector('.award-note').addEventListener('click', ()=>{
+          activeAuthId = linkedActor.id; switchView('authorities'); renderAuth();
+        });
+      }
+      document.querySelectorAll('[data-jump-org-comp]').forEach(a=>{
+        a.addEventListener('click', ()=>{ activeCompId = a.dataset.jumpOrgComp; switchView('competitions'); renderComp(); });
+      });
+    });
+  });
+}
+
+function renderSpaces(){
+  const map = document.getElementById('venueMap');
+  map.innerHTML = Object.entries(VENUES).map(([id,v])=>{
+    const d = projectDot(v.lat, v.lng);
+    return `<div class="venue-dot" style="left:${d.x}%; top:${d.y}%;" data-venue="${id}" title="${v.name}"></div>`;
+  }).join('');
+  map.querySelectorAll('[data-venue]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const id = el.dataset.venue;
+      const v = VENUES[id];
+      const comps = COMPETITIONS.filter(c=>c.venue===id);
+      document.getElementById('venueDetail').innerHTML = `
+        <div class="relation-label">${v.name} — 이곳에서 열린 대회 ${comps.length}건</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">위도 ${v.lat.toFixed(2)}, 경도 ${v.lng.toFixed(2)}</div>
+        <ul class="relation-list">
+          ${comps.map(c=>`<li><span class="relation-anchor" data-jump-venue-comp="${c.id}" style="cursor:pointer;">${c.name} (${getYear(c)})</span></li>`).join('')}
+        </ul>`;
+      document.querySelectorAll('[data-jump-venue-comp]').forEach(a=>{
+        a.addEventListener('click', ()=>{ activeCompId = a.dataset.jumpVenueComp; switchView('competitions'); renderComp(); });
+      });
+    });
+  });
+}
+
+function renderCapsule(){
+  document.getElementById('capsuleStats').innerHTML = `
+    <div class="hero-stat"><div class="hs-num">0</div><div class="hs-label">봉인된 투고 (샘플 · 신규 제작 예정)</div></div>
+    <div class="hero-stat"><div class="hs-num">2036.08</div><div class="hs-label">개봉 예정 (40주년)</div></div>
+  `;
+}
+
+
+
+renderExplore();
+renderComp();
+renderAuth();
+</script>
+</body>
+</html>
