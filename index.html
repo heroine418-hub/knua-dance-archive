@@ -10,7 +10,8 @@
     --rule: #e5e5e5; --rule-dark: #141414; --text-muted: #737373;
     --font-base: -apple-system, BlinkMacSystemFont, "Pretendard Variable", sans-serif;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  button, .side-item, .sheet-entry, .grid-card, .zone-card, .nav-item, .type-chip { touch-action: manipulation; }
   body {
     background-color: var(--white); color: var(--black); font-family: var(--font-base);
     font-size: 13px; letter-spacing: -0.015em; display: flex; flex-direction: column;
@@ -221,6 +222,89 @@
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: var(--white); }
   ::-webkit-scrollbar-thumb { background: var(--rule); }
+
+  /* ============================================================
+     모바일 대응 (≤760px)
+     - 좌측 세로 사이드바 → 상단 가로 스크롤 메뉴
+     - 3단 워크스페이스(필터/목록/상세) → 세로 스택, 페이지 전체 스크롤
+     - 탭 타겟 확대, 목록 선택 시 상세로 자동 스크롤
+  ============================================================ */
+  @media (max-width: 760px) {
+    html, body { height: auto; min-height: 100vh; overflow: visible; font-size: 13.5px; }
+
+    .special-exhibit-banner {
+      flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 16px; font-size: 10.5px;
+    }
+    .banner-left { gap: 6px; }
+    .banner-link { margin-left: 0; }
+
+    .masthead { height: auto; grid-template-columns: 1fr; }
+    .brand-block { border-right: none; border-bottom: 1px solid var(--rule-dark); padding: 12px 16px; }
+    .nav-block { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 16px; }
+
+    .app-body { flex-direction: column; overflow: visible; }
+
+    /* 사이드바 → 가로 스크롤 칩 메뉴 */
+    .side-menu {
+      width: 100%; flex-direction: row; overflow-x: auto; overflow-y: hidden;
+      border-right: none; border-bottom: 1px solid var(--rule-dark);
+      padding: 10px 12px; gap: 8px; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .side-menu::-webkit-scrollbar { display: none; }
+    .side-item {
+      flex-shrink: 0; width: auto; white-space: nowrap;
+      padding: 9px 14px; border-radius: 100px; border: 1.5px solid var(--rule);
+      min-height: 38px;
+    }
+    .side-item.active { border-color: var(--orange); }
+    .side-sep { display: none; }
+
+    .view-container { overflow: visible; }
+
+    /* 3단 워크스페이스 → 세로 스택 */
+    .workspace { grid-template-columns: 1fr !important; overflow: visible; }
+    .col-nav, .col-feed, .col-preview {
+      overflow-y: visible; max-height: none; padding: 16px;
+      border-right: none !important; border-bottom: 1px solid var(--rule);
+    }
+    .col-preview { border-bottom: none; }
+    .col-preview.has-content { border-top: 3px solid var(--orange); }
+
+    /* 필터 영역 접기/펼치기 */
+    .col-nav { padding-bottom: 4px; }
+    .nav-group-title { margin-top: 4px; }
+
+    /* 목록 행 탭 타겟 확대 */
+    .sheet-entry { grid-template-columns: 54px 1fr; padding: 14px 6px; min-height: 56px; }
+    .entry-year { font-size: 11px; }
+    .item-title, .entry-main h3 { font-size: 13px; }
+
+    /* 카드형 뷰 */
+    .card-view { padding: 18px 16px; }
+    .card-view-header h2 { font-size: 17px; }
+    .card-grid { grid-template-columns: repeat(auto-fill, minmax(126px,1fr)); }
+    .grid-card { padding: 12px; min-height: 64px; }
+    .hero-block { gap: 18px 26px; margin-bottom: 22px; }
+    .hero-stat .hs-num { font-size: 24px; }
+    .venue-map-wrap { height: 200px; }
+
+    /* 상세 패널 타이포 축소 */
+    .detail-title { font-size: 15px; }
+    .item-visual, .viewer-plate { height: 150px; }
+    .relation-grid { grid-template-columns: 1fr; gap: 14px; }
+
+    /* 버튼 탭 타겟 */
+    .clear-btn, .banner-link, .nav-item, .grid-card, .zone-card, .type-chip, .sort-btn { min-height: 38px; }
+
+    /* 검색창은 이 프로토타입엔 없지만 혹시 대비 */
+    .searchbox { width: 100%; }
+  }
+
+  @media (max-width: 420px) {
+    .card-grid { grid-template-columns: repeat(auto-fill, minmax(105px,1fr)); }
+    .hero-block { gap: 14px 20px; }
+  }
 </style>
 </head>
 <body>
@@ -1101,6 +1185,24 @@ function renderCapsule(){
 renderExplore();
 renderComp();
 renderAuth();
+
+/* ============================================================
+   모바일 UX — 목록에서 항목을 선택하면 상세 패널로 자동 스크롤.
+   기존 클릭 핸들러를 전부 건드리지 않고, 상세 패널의 내용 변화를
+   감지해서(자식 노드 변경) 뷰포트가 좁을 때만 스크롤합니다.
+============================================================ */
+function mobileAutoScrollTo(el){
+  if(!el) return;
+  if(window.innerWidth <= 760){
+    setTimeout(()=> el.scrollIntoView({ behavior:'smooth', block:'start' }), 60);
+  }
+}
+['colPreviewExplore','colPreviewComp','colPreviewAuth','itemTypeDetail','orgDetail','venueDetail'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(!el) return;
+  const observer = new MutationObserver(()=> mobileAutoScrollTo(el));
+  observer.observe(el, { childList: true });
+});
 </script>
 </body>
 </html>
